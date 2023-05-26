@@ -1,0 +1,84 @@
+/*******************************************************************************************
+  SIMPL+ Module Information
+  (Fill in comments below)
+*******************************************************************************************/
+/*
+Dealer Name: None
+System Name:
+System Number:
+Programmer: Michel Wohlert
+Comments: Module for communicating with WLEDs json api via Simpl#
+*/
+
+// 46 = Custom
+#category "46" "WLED"
+#user_simplsharp_library "Crestron-WLED"
+
+
+// Inputs/Outputs
+Digital_Input setState;
+String_Input Color[10];
+Analog_Input Brightness;
+
+Digital_Output SuccessFb;
+
+// Parameters
+STRING_PARAMETER _SKIP_,_SKIP_,_SKIP_,IP_Address[100];
+SIGNED_INTEGER_PARAMETER Port;
+
+
+// Simpl+ Variables
+INTEGER ledsOn;
+
+// Simpl# Classes / Structs
+
+WLED wled;
+
+/*******************************************************************************************
+  Event Handlers
+  (Uncomment and declare additional event handlers as needed)
+*******************************************************************************************/
+
+
+push setState
+{
+	wled.Host = IP_Address;
+	wled.Port = Port;
+	
+	if ( Brightness > 0) {
+		ledsOn = 1;
+	} else {
+		ledsOn = 0;
+	}
+	
+	wled.SetState(ledsOn, Color, Brightness, 0);
+
+}
+
+callback function UpdateInformation ( INTEGER Value )
+{
+   if( Value = 1) {    
+   		//SetState was successful
+   		SuccessFb = 1;
+   	} else {
+     	// Fail
+     	SuccessFb = 0;
+    }
+}
+
+/*******************************************************************************************
+  Main()
+  Uncomment and place one-time startup code here
+  (This code will get called when the system starts up)
+*******************************************************************************************/
+
+Function Main()
+{
+	// Registering of delegates and events have to happen here in Function main.
+	// RegisterDelegate(Class Instance, Delegate Property name, Your localcallback function name);
+	// This is very important to understand you do NOT use the class delegate name here.
+	// Use the Delegate Property Name that is the instance of the actual delegate that is created
+	// by the class you are using.   This is a very common mistake programmers make.  
+	
+ //	registerDelegate (wled, WLEDDelegate, UpdateInformation);
+}
