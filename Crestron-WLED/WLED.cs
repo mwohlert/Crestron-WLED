@@ -17,10 +17,6 @@ namespace Crestron_WLED
         public string Host { private get; set; }
         public ushort Port { private get; set; }
         
-        public bool On { private get; set; }
-        public UInt16 Brightness { private get; set; }
-        public string Color { private get; set; }
-
         public DelegateTemplate WLEDDelegate { get; set; }
 
 
