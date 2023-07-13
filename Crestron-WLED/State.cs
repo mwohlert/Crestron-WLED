@@ -8,16 +8,43 @@ using Newtonsoft.Json;
 
 namespace Crestron_WLED
 {
+    // Crestron prefixed structs for use in SIMPL+, since no bool available
+    public struct CrestronWLEDState
+    {
+        public ushort on;
+        public ushort bri;
+        public CrestronWLEDSegment[] seg;
+    }
+
+    public struct CrestronWLEDSegment
+    {
+        public string col;
+        public ushort bri;
+        public ushort fx;
+    }
+
     public struct WLEDState
     {
         public bool on;
+        public ushort bri;
         public WLEDSegment[] seg;
 
-        public WLEDState(bool _on, string _color, ushort _bri, ushort _fx)
+        public WLEDState(ref CrestronWLEDState crestronState)
         {
-            on = _on;
-            seg = new WLEDSegment[1];
-            seg[0] = new WLEDSegment(_color, _bri, _fx);
+            on = crestronState.on > 0;
+            bri = crestronState.bri;
+            if (crestronState.seg.Length == 0)
+            {
+                seg = new WLEDSegment[1];
+            }
+            else
+            {
+                seg = new WLEDSegment[crestronState.seg.Length];
+                for (int i = 0; i < crestronState.seg.Length; i++)
+                {
+                    seg[i] = new WLEDSegment(ref crestronState.seg[i]);
+                }
+            }
         }
 
         public string ToJson()
@@ -32,25 +59,23 @@ namespace Crestron_WLED
         public ushort bri;
         public ushort fx;
 
-        public WLEDSegment(string _color, ushort _bri, ushort _fx)
+        public WLEDSegment(ref CrestronWLEDSegment crestronSegment)
         {
-            col = _color;
-            bri = _bri;
-            fx = _fx;
+            col = crestronSegment.col;
+            bri = crestronSegment.bri;
+            fx = crestronSegment.fx;
         }
     }
 
     public class WLEDStructHelper
     {
 
-        public WLEDState CreateStateStruct(bool _on, string _color, ushort _bri, ushort _fx)
+        public int InitStateStruct(ref CrestronWLEDState state, ushort numberOfSegments)
         {
-            return new WLEDState(_on, _color, _bri, _fx);
-        }
 
-        public int InitStateStruct(ref WLEDState state)
-        {
+            state.seg = new CrestronWLEDSegment[numberOfSegments];
             return 0;
         }
+
     }
 }

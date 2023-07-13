@@ -33,25 +33,32 @@ INTEGER ledsOn;
 // Simpl# Classes / Structs
 
 WLED wled;
+WLEDStructHelper structHelper;
 
 /*******************************************************************************************
   Event Handlers
   (Uncomment and declare additional event handlers as needed)
 *******************************************************************************************/
 
-
 push setState
 {
-	wled.Host = IP_Address;
-	wled.Port = Port;
-	
+	CrestronWLEDState targetState;
+	CrestronWLEDSegment segment;
+
+    segment.col = Color;
+	segment.bri = Brightness;
+    segment.fx = 0;
+
 	if ( Brightness > 0) {
-		ledsOn = 1;
+		targetState.on = 1;
 	} else {
-		ledsOn = 0;
+		targetState.on = 0;
 	}
+
+	structHelper.InitStateStruct(targetState, 1);
+	targetState.seg[0] = segment;
 	
-	wled.SetState(ledsOn, Color, Brightness, 0);
+	wled.SetState(targetState);
 
 }
 
@@ -81,4 +88,6 @@ Function Main()
 	// by the class you are using.   This is a very common mistake programmers make.  
 	
  //	registerDelegate (wled, WLEDDelegate, UpdateInformation);
+	
+	wled.SetAddress(IP_Address, Port);
 }

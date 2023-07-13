@@ -14,8 +14,8 @@ namespace Crestron_WLED
     public class WLED
     {
         // Connection information
-        public string Host { private get; set; }
-        public ushort Port { private get; set; }
+        private string Host;
+        private ushort Port;
         
         public DelegateTemplate WLEDDelegate { get; set; }
 
@@ -31,6 +31,15 @@ namespace Crestron_WLED
         /// <summary>
         /// Retreive current WLED state
         /// </summary>
+        public void SetAddress(string _host, ushort _port)
+        {
+            Host = _host;
+            Port = _port;
+        }
+
+        /// <summary>
+        /// Retreive current WLED state
+        /// </summary>
         public void GetState()
         {
         }
@@ -38,9 +47,9 @@ namespace Crestron_WLED
         /// <summary>
         /// Set WLED state
         /// </summary>
-        public void SetState(ushort _on, string _color, ushort _bri, ushort _fx)
+        public void SetState(ref CrestronWLEDState _crestronState)
         {
-            WLEDState state = new WLEDState(_on == 1 ? true : false, _color, _bri, _fx);
+            WLEDState state = new WLEDState(ref _crestronState);
             HttpClientRequest req = new HttpClientRequest();
             req.Header.ContentType = "application/json";
             req.RequestType = RequestType.Post;
