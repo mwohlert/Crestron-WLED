@@ -19,10 +19,10 @@
 
 ## Planned Features
 
-- [] Allow for unlimited number of segments
-- [] Allow querying for the current state
-- [] Automatic discovery
-- [] HTTP Communication
+- [ ] Allow for unlimited number of segments
+- [ ] Allow querying for the current state
+- [ ] Automatic discovery
+- [ ] HTTPS Communication
 
 ## How To Use
 
