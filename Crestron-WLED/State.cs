@@ -13,6 +13,7 @@ namespace Crestron_WLED
     {
         public ushort on;
         public ushort bri;
+        public ushort transition;
         public CrestronWLEDSegment[] seg;
     }
 
@@ -21,18 +22,22 @@ namespace Crestron_WLED
         public string col;
         public ushort bri;
         public ushort fx;
+        public ushort sx;
+        public ushort ix;
     }
 
     public struct WLEDState
     {
         public bool on;
         public ushort bri;
+        public ushort transition;
         public WLEDSegment[] seg;
 
         public WLEDState(ref CrestronWLEDState crestronState)
         {
             on = crestronState.on > 0;
             bri = crestronState.bri;
+            transition = crestronState.transition;
             if (crestronState.seg.Length == 0)
             {
                 seg = new WLEDSegment[1];
@@ -58,12 +63,16 @@ namespace Crestron_WLED
         public string col;
         public ushort bri;
         public ushort fx;
+        public ushort sx;
+        public ushort ix;
 
         public WLEDSegment(ref CrestronWLEDSegment crestronSegment)
         {
             col = crestronSegment.col;
             bri = crestronSegment.bri;
             fx = crestronSegment.fx;
+            sx = crestronSegment.sx;
+            ix = crestronSegment.ix;
         }
     }
 

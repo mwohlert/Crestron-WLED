@@ -17,13 +17,17 @@ Comments: Module for communicating with WLEDs json api via Simpl#
 
 // Inputs/Outputs
 Digital_Input setState;
+Analog_Input Transition_Duration;
 String_Input Color[10];
 Analog_Input Brightness;
+Analog_Input Effect;
+Analog_Input Effect_Speed;
+Analog_Input Effect_Intensity;
 
 Digital_Output SuccessFb;
 
 // Parameters
-STRING_PARAMETER _SKIP_,_SKIP_,_SKIP_,IP_Address[100];
+STRING_PARAMETER _SKIP_,_SKIP_,_SKIP_, _SKIP_, _SKIP_ , _SKIP_, _SKIP_, IP_Address[100];
 SIGNED_INTEGER_PARAMETER Port;
 
 
@@ -47,17 +51,20 @@ push setState
 
     segment.col = Color;
 	segment.bri = Brightness;
-    segment.fx = 0;
+    segment.fx = Effect;
+    segment.sx = Effect_Speed;
+    segment.ix = Effect_Intensity;
 
 	if ( Brightness > 0) {
 		targetState.on = 1;
 	} else {
 		targetState.on = 0;
 	}
-
+    targetState.transition=Transition_Duration;
 	structHelper.InitStateStruct(targetState, 1);
 	targetState.seg[0] = segment;
 	
+		
 	wled.SetState(targetState);
 
 }
